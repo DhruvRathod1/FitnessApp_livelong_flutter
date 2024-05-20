@@ -3,6 +3,7 @@ import 'size_config.dart';
 import 'home.dart';
 import 'onboarding_contents.dart';
 import 'loginpage.dart';
+import 'workout_page.dart';
 
 
 class OnboardingScreen extends StatefulWidget {

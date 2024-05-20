@@ -21,19 +21,11 @@ class _MealPageState extends State<MealPage> {
       final Map<String, dynamic> nutritionData = await MealApi.fetchNutritionInfo(query);
       setState(() {
         _recipe = Recipe.fromJson(nutritionData);
-        _updateTotalValues(_recipe!);
       });
     } catch (e) {
       print('Error fetching nutrition info: $e');
       // Handle error, e.g., display an error message to the user
     }
-  }
-
-  void _updateTotalValues(Recipe recipe) {
-    setState(() {
-      _totalCalories += recipe.calories;
-      _totalProtein += recipe.protein_g;
-    });
   }
 
   void _addCaloriesAndProtein(double calories, double protein) {
@@ -102,7 +94,8 @@ class _MealPageState extends State<MealPage> {
               },
               child: Text('Add Meal'),
             ),
-            // Add additional widgets here if needed
+            SizedBox(height: 20),
+            _buildRecipeList(), // Display list of recipes
           ],
         ),
       ),
@@ -144,6 +137,67 @@ class _MealPageState extends State<MealPage> {
           Text(
             '$value / $max',
             style: TextStyle(fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecipeList() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Featured Recipes',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(
+          height: 200, // Adjust the height as needed
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              _buildRecipeItem(
+                'Breakfast',
+                'assets/images/breakfast.png',
+              ),
+              _buildRecipeItem(
+                'Salad',
+                'assets/images/salad.png',
+              ),
+              _buildRecipeItem(
+                'Smoothie',
+                'assets/images/smoothie.png',
+              ),
+              // Add more recipe items as needed
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRecipeItem(String name, String imagePath) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image.asset(
+              imagePath,
+              width: 150,
+              height: 150,
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            name,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ],
       ),

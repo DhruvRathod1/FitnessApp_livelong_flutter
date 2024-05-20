@@ -2,9 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:livelong_flutter/home.dart';
-import 'package:livelong_flutter/registerPage.dart';
 import 'package:livelong_flutter/signuppage.dart';
 import 'package:livelong_flutter/uihelper.dart';
+import 'meal_page.dart';
+import 'workout_page.dart';
+import 'progress_tracking_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,7 +27,10 @@ class _LoginPageState extends State<LoginPage> {
       UserCredential? usercredential;
       try{
         usercredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterPage(title: "login")));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
         });
       }
       on FirebaseAuthException catch(ex){
@@ -43,8 +48,18 @@ class _LoginPageState extends State<LoginPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-        UiHelper.CustomTextField(emailController, "Email", Icons.mail, false),
-        UiHelper.CustomTextField(passwordController, "Password", Icons.password, true),
+        UiHelper.CustomTextField( emailController,
+          "Email",
+          Icons.mail,
+          false,
+          TextInputType.emailAddress,
+          false),
+        UiHelper.CustomTextField( passwordController,
+          "Password",
+          Icons.password,
+          true,
+          TextInputType.text,
+          true),
         SizedBox(height: 30),
         UiHelper.CustomButton(() { 
           login(emailController.text.toString(), passwordController.text.toString());
